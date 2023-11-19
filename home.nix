@@ -78,7 +78,10 @@
 		userName = "htgar";
 		userEmail = "development@htgar.org";
 	};
-	programs.git-credential-oauth.enable = true;
+
+	programs.gh = {
+		enable = true;
+	};
 
 	# Tmux
 	programs.tmux = {
