@@ -12,6 +12,7 @@
     pkgs.ripgrep
     pkgs.fd
     pkgs.gcc
+		pkgs.devbox
   ];
 
   home.file = {
@@ -21,7 +22,6 @@
   programs.home-manager.enable = true;
 
   # Shell
-
   programs.bash = {
     enable = true;
   };
@@ -32,6 +32,13 @@
   };
 
 	# Tools
+
+	# Direnv
+	programs.direnv = {
+		enable = true;
+		enableBashIntegration = true;
+		nix-direnv.enable = true;
+	};
 
 	# Starship
   programs.starship = {
@@ -72,11 +79,14 @@
 		userEmail = "development@htgar.org";
 	};
 	programs.git-credential-oauth.enable = true;
-  
+
 	# Tmux
 	programs.tmux = {
 		enable = true;
+		extraConfig = builtins.readFile ./tmux/tmux.conf;
+		plugins = with pkgs.tmuxPlugins; [
+			vim-tmux-navigator
+			catppuccin
+		];
 	};
 }
-
-
