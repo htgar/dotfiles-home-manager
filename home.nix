@@ -12,7 +12,7 @@
     pkgs.ripgrep
     pkgs.fd
     pkgs.gcc
-		pkgs.devbox
+	pkgs.devbox
   ];
 
   home.file = {
@@ -30,6 +30,29 @@
     enable = true;
     extraConfig = builtins.readFile ./inputrc;
   };
+
+  # Neovim
+  programs.neovim = {
+    enable = true;
+		defaultEditor = true;
+    extraLuaConfig = builtins.readFile ./nvim/init.lua;
+  };
+
+	# Git
+	programs.git = {
+		enable = true;
+		delta = {
+			enable = true;
+			options = {};
+		};
+		lfs.enable = true;
+		userName = "htgar";
+		userEmail = "development@htgar.org";
+	};
+
+	programs.gh = {
+		enable = true;
+	};
 
 	# Tools
 
@@ -60,36 +83,11 @@
 		};
   };
 
-  # Neovim
-  programs.neovim = {
-    enable = true;
-		defaultEditor = true;
-    extraLuaConfig = builtins.readFile ./nvim/init.lua;
-  };
+	# GUI Tools
 
-	# Git
-	programs.git = {
+	# VSCode
+	programs.vscode = {
 		enable = true;
-		delta = {
-			enable = true;
-			options = {};
-		};
-		lfs.enable = true;
-		userName = "htgar";
-		userEmail = "development@htgar.org";
-	};
-
-	programs.gh = {
-		enable = true;
-	};
-
-	# Tmux
-	programs.tmux = {
-		enable = true;
-		extraConfig = builtins.readFile ./tmux.conf;
-		plugins = with pkgs.tmuxPlugins; [
-			vim-tmux-navigator
-			catppuccin
-		];
+		package = pkgs.vscodium;
 	};
 }

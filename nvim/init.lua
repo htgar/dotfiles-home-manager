@@ -23,8 +23,6 @@ vim.wo.relativenumber = true
 -- vim.o.mouse = 'a'
 
 -- Sync clipboard between OS and Neovim.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
 vim.o.clipboard = 'unnamedplus'
 
 -- Enable break indent (Covered by Mini Basic)
@@ -58,7 +56,6 @@ vim.o.scrolloff = 4
 -- Statusline
 vim.o.laststatus = 3
 vim.o.cmdheight = 0
-
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
@@ -126,57 +123,85 @@ require("lazy").setup({
         require('mini.clue').setup({
             triggers = {
             -- Leader triggers
-            { mode = 'n', keys = '<Leader>' },
-            { mode = 'x', keys = '<Leader>'},
+							{ mode = 'n', keys = '<Leader>' },
+							{ mode = 'x', keys = '<Leader>'},
 
-            -- Built-in completion
-            { mode = 'i', keys = '<C-x>' },
+							-- Built-in completion
+							{ mode = 'i', keys = '<C-x>' },
 
-            -- `g` key
-            { mode = 'n', keys = 'g' },
-            { mode = 'x', keys = 'g' },
+							-- `g` key
+							{ mode = 'n', keys = 'g' },
+							{ mode = 'x', keys = 'g' },
 
-            -- Marks
-            { mode = 'n', keys = "'" },
-            { mode = 'n', keys = '`' },
-            { mode = 'x', keys = "'" },
-            { mode = 'x', keys = '`' },
+							-- `s` key
+							{ mode = 'n', keys = 's' },
+							{ mode = 'x', keys = 's' },
 
-            -- Registers
-            { mode = 'n', keys = '"' },
-            { mode = 'x', keys = '"' },
-            { mode = 'i', keys = '<C-r>' },
-            { mode = 'c', keys = '<C-r>' },
+							-- Bracketed key
+							{ mode = 'n', keys = '[' },
+							{ mode = 'x', keys = '[' },
+							{ mode = 'n', keys = ']' },
+							{ mode = 'x', keys = ']' },
 
-            -- Window commands
-            { mode = 'n', keys = '<C-w>' },
+							-- Marks
+							{ mode = 'n', keys = "'" },
+							{ mode = 'n', keys = '`' },
+							{ mode = 'x', keys = "'" },
+							{ mode = 'x', keys = '`' },
 
-            -- `z` key
-            { mode = 'n', keys = 'z' },
-            { mode = 'x', keys = 'z' },
+							-- Registers
+							{ mode = 'n', keys = '"' },
+							{ mode = 'x', keys = '"' },
+							{ mode = 'i', keys = '<C-r>' },
+							{ mode = 'c', keys = '<C-r>' },
+
+							-- Window commands
+							{ mode = 'n', keys = '<C-w>' },
+
+							-- `z` key
+							{ mode = 'n', keys = 'z' },
+							{ mode = 'x', keys = 'z' },
             },
 
             clues = {
-                { mode = 'n', keys = '<Leader>f', desc = 'Find' },
-                { mode = 'n', keys = '<Leader>b', desc = 'Buffer' },
-                function() MiniClue.gen_clues.g() end,
-                function() MiniClue.gen_clues.builtin_completion() end,
-                function() MiniClue.gen_clues.marks() end,
-                function() MiniClue.gen_clues.registers() end,
-                function() MiniClue.gen_clues.windows() end,
-                function() MiniClue.gen_clues.z() end,
+              { mode = 'n', keys = '<Leader>f', desc = 'Find' },
+              { mode = 'n', keys = '<Leader>b', desc = 'Buffer' },
+							require('mini.clue').gen_clues.builtin_completion(),
+							require('mini.clue').gen_clues.g(),
+							require('mini.clue').gen_clues.marks(),
+							require('mini.clue').gen_clues.registers(),
+							require('mini.clue').gen_clues.windows(),
+							require('mini.clue').gen_clues.z(),
             },
             window = {
-                delay = 300
+							delay = 300
             }
         })
-        require('mini.files').setup()
+				require('mini.cursorword').setup()
+        require('mini.files').setup({
+					mappings = {
+						go_in_plus = '<CR>',
+					},
+				})
+				require('mini.hipatterns').setup({
+					highlighters = {
+						-- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
+						fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+						hack  = { pattern = '%f[%w]()HACK()%f[%W]',  group = 'MiniHipatternsHack'  },
+						todo  = { pattern = '%f[%w]()TODO()%f[%W]',  group = 'MiniHipatternsTodo'  },
+						note  = { pattern = '%f[%w]()NOTE()%f[%W]',  group = 'MiniHipatternsNote'  },
+
+						-- Highlight hex color strings (`#rrggbb`) using that color
+						hex_color = require('mini.hipatterns').gen_highlighter.hex_color(),
+					},
+				})
         require('mini.indentscope').setup({
           draw = {
               animation = function(s, n) return 5 end,
           },
           symbol = "│"
         })
+				require('mini.jump').setup()
         require('mini.pairs').setup()
         require('mini.pick').setup({
             mappings = {
@@ -192,7 +217,7 @@ require("lazy").setup({
             }
         })
         require('mini.surround').setup()
-        require('mini.tabline').setup()
+        -- require('mini.tabline').setup()
       end
     },
 
@@ -342,8 +367,8 @@ keymap("n", "<leader>fh", "<cmd>lua MiniPick.builtin.help()<cr>", { noremap = tr
 
 -- Buffer Related Keymaps
 keymap("n", "<leader>bd", "<cmd>bd<cr>", { noremap = true, silent = true , desc = 'Close Buffer'})
-keymap("n", "<C-l>", "<cmd>bnext<cr>", { silent = true , desc = 'Next Buffer'})
-keymap("n", "<C-h>", "<cmd>bprevious<cr>", { silent = true , desc = 'Previous Buffer'})
+keymap("n", "<leader>bn", "<cmd>bnext<cr>", { silent = true , desc = 'Next Buffer'})
+keymap("n", "<leader>bp", "<cmd>bprevious<cr>", { silent = true , desc = 'Previous Buffer'})
 
 -- Treesitter
 vim.defer_fn(function()
