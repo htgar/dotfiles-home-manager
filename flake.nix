@@ -14,7 +14,8 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-    in {
+    in
+    {
       homeConfigurations."htgar" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
 
