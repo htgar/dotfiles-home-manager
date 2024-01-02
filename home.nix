@@ -11,9 +11,7 @@
     pkgs.ripgrep
     pkgs.fd
     pkgs.wl-clipboard
-    pkgs.nodejs
-    pkgs.cargo
-    pkgs.zk
+    pkgs.gcc     
 
     # Main LSPs
     pkgs.rnix-lsp
@@ -48,7 +46,6 @@
     defaultEditor = true;
 
     extraPackages = with pkgs; [
-      gcc # For treesitter
     ];
 
     extraLuaConfig = builtins.readFile ./nvim/init.lua;
